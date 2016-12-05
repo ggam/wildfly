@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.apache.commons.lang.SystemUtils;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -19,7 +20,6 @@ import org.jboss.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,7 +33,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-@Ignore("AS7-3414")
 public class SymlinkingUnitTestCase {
 
     private static final Logger logger = Logger.getLogger(SymlinkingUnitTestCase.class);
@@ -43,9 +42,9 @@ public class SymlinkingUnitTestCase {
     private static File symbolic = null;
     private static ModelControllerClient controllerClient = TestSuiteEnvironment.getModelControllerClient();
 
-
     @BeforeClass
     public static void beforeClass() throws IOException, InterruptedException {
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
         logger.infof("beforeClass() call.");
         // We are going to check whether or not the war deployment actually exists.
         Assert.assertTrue(checkForDeployment());
